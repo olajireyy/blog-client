@@ -1,16 +1,119 @@
-# React + Vite
+# Blog Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React frontend for the Blog API. Built with Vite, React Router, and Axios. Features JWT authentication, per-user post ownership, and a dark editorial design.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 18
+- Vite
+- React Router DOM
+- Axios
+- JWT (stored in localStorage)
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+
+- npm or yarn
+- [Blog API](https://github.com/yourusername/blog-api) running locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Installation
+
+1. Clone the repo
+   ```bash
+   git clone https://github.com/yourusername/blog-client.git
+   cd blog-client
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Set the API base URL in `src/api.js`
+   ```javascript
+   const api = axios.create({
+       baseURL: 'http://localhost:7174/api',
+   })
+   ```
+
+4. Start the dev server
+   ```bash
+   npm run dev
+   ```
+
+App runs on `http://localhost:5173` by default.
+
+## Features
+
+- Browse all blog posts without logging in
+- Register and login with email and password
+- Create posts when logged in
+- Edit and delete only your own posts
+- JWT token persisted across page refreshes
+- Ownership enforced on both the frontend and the API
+
+## Pages
+
+| Route | Component | Access | Description |
+|-------|-----------|--------|-------------|
+| `/` | PostList | Public | All posts |
+| `/posts/:id` | PostDetail | Public | Single post |
+| `/create` | PostForm | Auth | Create a post |
+| `/edit/:id` | PostForm | Owner | Edit a post |
+| `/login` | AuthForm | Public | Login |
+| `/register` | AuthForm | Public | Register |
+
+## Project Structure
+
+```
+blog-client/
+├── src/
+│   ├── components/
+│   │   ├── AuthForm.jsx      # Shared login and register form
+│   │   ├── Navbar.jsx        # Navigation with auth state
+│   │   ├── PostDetail.jsx    # Single post view
+│   │   ├── PostForm.jsx      # Create and edit form
+│   │   └── PostList.jsx      # All posts with ownership checks
+│   ├── api.js                # Axios instance with JWT interceptor
+│   ├── auth.js               # localStorage helpers for auth state
+│   ├── App.jsx               # Routes
+│   ├── main.jsx              # Entry point
+│   └── index.css             # Global styles
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+## Auth Flow
+
+```
+Register / Login
+      │
+      ▼
+API returns { token, email, userId }
+      │
+      ▼
+Stored in localStorage
+      │
+      ▼
+Axios interceptor attaches token to every request
+      │
+      ▼
+API validates token on protected routes
+```
+
+## Ownership Flow
+
+```
+Post created → userId saved to DB
+User views post → React compares post.userId with stored userId
+Match → Edit and Delete buttons shown
+No match → Buttons hidden
+Direct API call → API checks ownership → 403 if not owner
+```
+
+## Related
+
+- [blog-api](https://github.com/yourusername/blog-api) — ASP.NET Core API that powers this frontend
