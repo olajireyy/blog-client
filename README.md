@@ -16,13 +16,13 @@ A React frontend for the Blog API. Built with Vite, React Router, and Axios. Fea
 
 - Node.js 18+
 - npm or yarn
-- [Blog API](https://github.com/yourusername/blog-api) running locally
+- [Blog API](https://github.com/olajireyy/blog-api) running locally
 
 ### Installation
 
 1. Clone the repo
    ```bash
-   git clone https://github.com/yourusername/blog-client.git
+   git clone https://github.com/olajireyy/blog-client.git
    cd blog-client
    ```
 
@@ -116,4 +116,4 @@ Direct API call → API checks ownership → 403 if not owner
 
 ## Related
 
-- [blog-api](https://github.com/yourusername/blog-api) — ASP.NET Core API that powers this frontend
+- [blog-api](https://github.com/olajireyy/blog-api) — ASP.NET Core API that powers this frontend
